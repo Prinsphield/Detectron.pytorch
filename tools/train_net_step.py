@@ -130,8 +130,8 @@ def save_ckpt(output_dir, args, step, train_size, model, optimizer):
         'step': step,
         'train_size': train_size,
         'batch_size': args.batch_size,
-        'model': model.state_dict(),
-        'optimizer': optimizer.state_dict()}, save_name)
+        'model': {key: val.cpu() for key, val in model.state_dict().items()},
+        'optimizer': {key: val.cpu() for key, val in optimizer.state_dict().items()}}, save_name)
     logger.info('save model: %s', save_name)
 
 
@@ -256,7 +256,9 @@ def main():
     maskRCNN = Generalized_RCNN()
 
     if cfg.CUDA:
-        maskRCNN.cuda()
+        with torch.cuda.device(0):
+            maskRCNN.cuda()
+
 
     ### Optimizer ###
     gn_param_nameset = set()

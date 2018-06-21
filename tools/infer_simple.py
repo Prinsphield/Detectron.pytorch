@@ -115,7 +115,8 @@ def main():
     maskRCNN = Generalized_RCNN()
 
     if args.cuda:
-        maskRCNN.cuda()
+        with torch.cuda.device(0):
+            maskRCNN.cuda()
 
     if args.load_ckpt:
         load_name = args.load_ckpt

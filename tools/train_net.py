@@ -223,7 +223,8 @@ def main():
     maskRCNN = Generalized_RCNN()
 
     if cfg.CUDA:
-        maskRCNN.cuda()
+        with torch.cuda.device(0):
+            maskRCNN.cuda()
 
     ### Optimizer ###
     bias_params = []
